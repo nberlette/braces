@@ -8,9 +8,27 @@
     "url": "https://github.com/nberlette/braces"
   },
   "description": "Bash-style brace expansion for Deno, Bun, Node, Cloudflare Workers, and web browsers. Supports nested and complex expressions. Inspired by the 'brace-expansion' package by Julian Gruber.",
-  "exports": "./mod.ts",
+  "exports": {
+    ".": "./mod.ts",
+    "./braces": "./src/braces.ts",
+    "./expand": "./src/expand.ts",
+    "./balanced": "./src/balanced.ts"
+  },
   "imports": {
     "@std/expect": "jsr:@std/expect@^1.0.13",
     "@std/testing": "jsr:@std/testing@^1.0.9"
+  },
+  "publish": {
+    "include": [
+      "**/*.md",
+      "**/*.ts",
+      "**/*.json",
+      "LICENSE"
+    ],
+    "exclude": [
+      "**/*.test.*",
+      "**/*.bench.*",
+      "**/.*"
+    ]
   }
 }
