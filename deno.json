@@ -1,0 +1,16 @@
+{
+  "name": "@nick/braces",
+  "version": "0.1.0",
+  "license": "MIT",
+  "author": {
+    "name": "Nicholas Berlette",
+    "email": "nick@berlette.com",
+    "url": "https://github.com/nberlette/braces"
+  },
+  "description": "Bash-style brace expansion for Deno, Bun, Node, Cloudflare Workers, and web browsers. Supports nested and complex expressions. Inspired by the 'brace-expansion' package by Julian Gruber.",
+  "exports": "./mod.ts",
+  "imports": {
+    "@std/expect": "jsr:@std/expect@^1.0.13",
+    "@std/testing": "jsr:@std/testing@^1.0.9"
+  }
+}
