@@ -53,7 +53,6 @@ export function balanced(
   };
 }
 
-
 /**
  * Finds the range of the first balanced pair of tokens.
  *

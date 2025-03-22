@@ -30,7 +30,7 @@ describe("[braces] basic behavior", () => {
       "./deno.jsonc",
       "./deno.json",
       "./package.jsonc",
-      "./package.json"
+      "./package.json",
     ]);
   });
 
@@ -39,7 +39,7 @@ describe("[braces] basic behavior", () => {
     expect(result).toEqual([
       "./untitled-1.txt",
       "./untitled-2.txt",
-      "./untitled-3.txt"
+      "./untitled-3.txt",
     ]);
   });
 
@@ -48,7 +48,7 @@ describe("[braces] basic behavior", () => {
     expect(result).toEqual([
       "./file-part.100",
       "./file-part.200",
-      "./file-part.300"
+      "./file-part.300",
     ]);
   });
 
@@ -57,7 +57,7 @@ describe("[braces] basic behavior", () => {
     expect(result).toEqual([
       "abf",
       "acdf",
-      "acef"
+      "acef",
     ]);
   });
 
@@ -81,7 +81,7 @@ describe("[braces] basic behavior", () => {
     expect(result).toEqual([
       "file-01.txt",
       "file-02.txt",
-      "file-03.txt"
+      "file-03.txt",
     ]);
   });
 
@@ -122,7 +122,7 @@ describe("[braces] edge cases", () => {
       "preapost",
       "prebpost",
       "precdpost",
-      "preceptpost"
+      "preceptpost",
     ];
     expect(braces(input)).toEqual(expected);
   });

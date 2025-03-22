@@ -35,7 +35,7 @@ describe("expand - extra cases", () => {
     expect(result).toEqual([
       "file-01.txt",
       "file-02.txt",
-      "file-03.txt"
+      "file-03.txt",
     ]);
   });
 

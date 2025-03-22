@@ -7,9 +7,16 @@
  * @module expand
  */
 
-import { embrace, gte, isPadded, lte, numeric, parseCommaParts, patterns } from "./_internal.ts";
+import {
+  embrace,
+  gte,
+  isPadded,
+  lte,
+  numeric,
+  parseCommaParts,
+  patterns,
+} from "./_internal.ts";
 import { balanced } from "./balanced.ts";
-
 
 /**
  * Recursively expands brace expressions in a string.
