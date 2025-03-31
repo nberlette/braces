@@ -1,6 +1,7 @@
 {
   "version": "4",
   "specifiers": {
+    "jsr:@decorators/lru@*": "0.1.2",
     "jsr:@std/assert@1": "1.0.11",
     "jsr:@std/assert@^1.0.10": "1.0.11",
     "jsr:@std/assert@^1.0.11": "1.0.11",
@@ -13,6 +14,9 @@
     "jsr:@std/testing@^1.0.9": "1.0.9"
   },
   "jsr": {
+    "@decorators/lru@0.1.2": {
+      "integrity": "8941c06f00f2f528a58e1a336337e82485a6bef0baed8b00baedc61b2ef6cfdd"
+    },
     "@std/assert@1.0.11": {
       "integrity": "2461ef3c368fe88bc60e186e7744a93112f16fd110022e113a0849e94d1c83c1",
       "dependencies": [
