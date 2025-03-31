@@ -5,55 +5,116 @@ on:
       - main
     tags:
       - "*"
+    paths-ignore:
+      - .github/**
+      - .gitignore
+      - .vscode/**
+      - ./*.md
+      - LICENSE
   pull_request:
     branches:
       - main
   workflow_dispatch:
     inputs:
       publish:
-        description: "Publish the module"
+        type: boolean
+        description: "Publish to JSR?"
+        required: true
+        default: true
+      doc-lint:
+        type: boolean
+        description: "Run deno doc --lint?"
+        required: false
+        default: false
+      doc-test:
+        type: boolean
+        description: "Run deno test --doc?"
         required: false
         default: true
+      deno-lint:
         type: boolean
-
+        description: "Run deno lint?"
+        required: false
+        default: true
+      deno-fmt:
+        type: boolean
+        description: "Run deno fmt --check?"
+        required: false
+        default: true
+      deno-test:
+        type: boolean
+        description: "Run deno test?"
+        required: false
+        default: true
 jobs:
-  check-and-publish:
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+  test:
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 30
     permissions:
       contents: read
-      id-token: write
-      packages: write
-    concurrency:
-      group: ci-${{ github.ref }}
-      cancel-in-progress: true
+      id-token: write # required for deno publish
+    strategy:
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        deno: [canary]
     steps:
-      - name: checkout
+      - name: setup repo
         uses: actions/checkout@v4
 
       - name: setup deno
-        uses: denoland/setup-deno@main
+        uses: denoland/setup-deno@v2
         with:
-          deno-version: canary
+          # currently this is always canary
+          deno-version: ${{ matrix.deno }}
 
-      - id: check
-        name: run checks
+      - if: |
+          github.event_name == 'workflow_dispatch' &&
+          github.event.inputs.deno-test == 'true'
+        name: deno test
+        run: deno test -A --no-check=remote --parallel
+
+      - if: |
+          github.event_name != 'workflow_dispatch' ||
+          github.event.inputs.doc-test == 'true'
+        name: deno test --doc
+        run: deno test -A --no-check=remote --parallel --doc
+
+      - if: |
+          runner.os == 'Linux' &&
+          github.event_name == 'workflow_dispatch' &&
+          github.event.inputs.doc-lint == 'true'
+        name: deno doc --lint
         run: |
-          deno lint
-          deno fmt --check
-          deno test -A --no-check=remote --permit-no-files
-          deno doc --lint mod.ts
+          deno doc --lint mod.ts src/braces.ts src/balanced.ts src/expand.ts
 
-      - id: publish
-        if: |
-          steps.check.outcome == 'success' && (
+      # only need to run this once
+      - if: |
+          runner.os == 'Linux' && (
+            github.event_name != 'workflow_dispatch' ||
+            github.event.inputs.deno-lint == 'true'
+          )
+        name: deno lint
+        run: deno lint
+
+      # only need to run this once
+      - if: |
+          runner.os == 'Linux' && (
+            github.event_name != 'workflow_dispatch' ||
+            github.event.inputs.deno-fmt == 'true'
+          )
+        name: deno fmt --check
+        run: deno fmt --check
+
+      # only publish once, if on a tag or if manually triggered
+      - if: |
+          runner.os == 'Linux' && (
             (
-              github.event_name == 'workflow_dispatch' &&
-              github.event.inputs.publish == 'true'
-            ) || (
               github.event_name == 'push' &&
               startsWith(github.ref, 'refs/tags/')
+            ) || (
+              github.event_name == 'workflow_dispatch' &&
+              github.event.inputs.publish == 'true'
             )
           )
         name: publish to jsr
-        run: deno publish --dry-run --allow-dirty && deno publish --allow-dirty
+        run: deno publish --dry-run && deno publish
