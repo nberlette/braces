@@ -9,12 +9,12 @@
 
 import {
   embrace,
+  ESC_CLOSE,
   gte,
   isPadded,
   lte,
   numeric,
   parseCommaParts,
-  patterns,
 } from "./_internal.ts";
 import { balanced } from "./balanced.ts";
 
@@ -47,7 +47,7 @@ export function expand(str: string, isTop = false): string[] {
     if (!isSequence && !isOptions) {
       // Handle cases like "{a},b}"
       if (m.post.match(/,.*\}/)) {
-        str = m.pre + "{" + m.body + patterns[1][0][1] + m.post;
+        str = m.pre + "{" + m.body + ESC_CLOSE + m.post;
         return expand(str);
       }
       return [str];

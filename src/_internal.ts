@@ -1,34 +1,26 @@
 import { balanced } from "./balanced.ts";
 
-export const create_patterns = <L extends string, C extends string>(
-  label: L,
-  char: C,
-  nonce = Math.random().toString(),
-) => {
-  const esc = `\0${label.toUpperCase() as Uppercase<L>}_${nonce}\0` as const;
-  const escRegExp = new RegExp(esc, "g");
-  const escChar = char === "\\" ? "\\\\\\\\" : "\\\\" + char;
-  const charRegExp = new RegExp(escChar, "g");
+export const ESC_SLASH = "\0SLASH" + Math.random() + "\0";
+export const ESC_OPEN = "\0OPEN" + Math.random() + "\0";
+export const ESC_CLOSE = "\0CLOSE" + Math.random() + "\0";
+export const ESC_COMMA = "\0COMMA" + Math.random() + "\0";
+export const ESC_PERIOD = "\0PERIOD" + Math.random() + "\0";
 
-  return [
-    [charRegExp, esc],
-    [escRegExp, char],
-  ] as const;
+export const ESC_SLASH_RE = new RegExp(ESC_SLASH, "g");
+export const ESC_OPEN_RE = new RegExp(ESC_OPEN, "g");
+export const ESC_CLOSE_RE = new RegExp(ESC_CLOSE, "g");
+export const ESC_COMMA_RE = new RegExp(ESC_COMMA, "g");
+export const ESC_PERIOD_RE = new RegExp(ESC_PERIOD, "g");
 
-  // e.g. [[/\\\{/g, "\0OPEN_1234\0"], [/\0OPEN_1234\0/g, "{"]]
-};
-
-export const patterns = [
-  create_patterns("open", "{"),
-  create_patterns("close", "}"),
-  create_patterns("comma", ","),
-  create_patterns("period", "."),
-  create_patterns("slash", "\\"),
-] as const;
+export const SLASH_RE = /\\\\/g;
+export const OPEN_RE = /\\\{/g;
+export const CLOSE_RE = /\\\}/g;
+export const COMMA_RE = /\\,/g;
+export const PERIOD_RE = /\\\./g;
 
 /**
- * Converts a numeric string to a number; if not numeric, returns the character
- * code of the first character.
+ * Converts a numeric string to a number; if not numeric, returns the character code
+ * of the first character.
  *
  * @param str - The string to convert.
  * @returns A number.
@@ -44,10 +36,12 @@ export function numeric(str: string): number {
  * @returns The escaped string.
  */
 export function escapeBraces(str: string): string {
-  for (const [, [search, replace]] of patterns) {
-    str = str.replace(search, replace);
-  }
-  return str;
+  return str
+    .replace(SLASH_RE, ESC_SLASH)
+    .replace(OPEN_RE, ESC_OPEN)
+    .replace(CLOSE_RE, ESC_CLOSE)
+    .replace(COMMA_RE, ESC_COMMA)
+    .replace(PERIOD_RE, ESC_PERIOD);
 }
 
 /**
@@ -57,12 +51,13 @@ export function escapeBraces(str: string): string {
  * @returns The unescaped string.
  */
 export function unescapeBraces(str: string): string {
-  for (const [[search, replace]] of patterns) {
-    str = str.replace(search, replace);
-  }
-  return str;
+  return str
+    .replace(ESC_SLASH_RE, "\\")
+    .replace(ESC_OPEN_RE, "{")
+    .replace(ESC_CLOSE_RE, "}")
+    .replace(ESC_COMMA_RE, ",")
+    .replace(ESC_PERIOD_RE, ".");
 }
-
 /**
  * Splits a comma-separated string while preserving nested braced sections.
  *

@@ -56,7 +56,7 @@ describe("expand - extra cases", () => {
 
   it("handles literal dollar sign prevention", () => {
     // Pre ending with '$' should skip expansion inside braces.
-    const input = "price$ {100,200}";
+    const input = "price${100,200}";
     const result = expand(input);
     expect(result).toEqual([input]);
   });

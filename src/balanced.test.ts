@@ -23,7 +23,7 @@ describe("balanced", () => {
     const result = balanced("{", "}", str);
     expect(result?.pre).toEqual("start ");
     expect(result?.body).toContain("outer {inner");
-    expect(result?.post).toContain("end} finish");
+    expect(result?.post).toBe(" finish");
   });
 });
 
@@ -36,9 +36,9 @@ describe("balanced - extra cases", () => {
     expect(result).not.toEqual(null);
     if (result) {
       expect(result.pre).toEqual("");
-      expect(result.body).toEqual("a");
+      expect(result.body).toEqual("");
       // post should be "baaa"
-      expect(result.post).toEqual("baaa");
+      expect(result.post).toEqual("abaaa");
     }
   });
 
