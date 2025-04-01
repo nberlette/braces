@@ -80,12 +80,12 @@ input and returns an array of the fully-expanded brace expressions.
 |   ☑️   | **[Character ranges]**         |   `{a..z}`   |
 |   ☑️   | **[Stepped character ranges]** | `{a..z..2}`  |
 
-[basic interpolation]: ./#basic-interpolation
-[nested expressions]: ./#nested-expressions
-[numeric ranges]: ./#numeric-ranges
-[stepped numeric ranges]: ./#stepped-numeric-ranges
-[character ranges]: ./#character-ranges
-[stepped character ranges]: ./#stepped-character-ranges
+[basic interpolation]: #basic-interpolation
+[nested expressions]: #nested-expressions
+[numeric ranges]: #numeric-ranges
+[stepped numeric ranges]: #stepped-numeric-ranges
+[character ranges]: #character-ranges
+[stepped character ranges]: #stepped-character-ranges
 
 ## Examples
 
@@ -104,7 +104,7 @@ console.log(files);
 // ]
 ```
 
-### Nested Interpolation
+### Nested Expressions
 
 As long as the braces are balanced, this package can handle any level of nested
 expressions. Just like in Bash, the order of interpolation is left to right.
